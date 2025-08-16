@@ -1,13 +1,22 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>onboarding</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="ion-padding">
+  <!-- Swiper Web Component version -->
+  <swiper-container #swiperRef slides-per-view="1" pagination="true">
+    <swiper-slide>
+      <h2>Welcome to UniTask</h2>
+      <p>Stay organised with your timetable and tasks.</p>
+      <ion-button expand="block" (click)="next()">Next</ion-button>
+    </swiper-slide>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">onboarding</ion-title>
-    </ion-toolbar>
-  </ion-header>
+    <swiper-slide>
+      <h2>Class Timetable</h2>
+      <p>Easily view and manage your weekly classes.</p>
+      <ion-button expand="block" (click)="next()">Next</ion-button>
+    </swiper-slide>
+
+    <swiper-slide>
+      <h2>Tasks & Assignments</h2>
+      <p>Track your assignments and deadlines.</p>
+      <ion-button expand="block" (click)="finish()">Get Started</ion-button>
+    </swiper-slide>
+  </swiper-container>
 </ion-content>
