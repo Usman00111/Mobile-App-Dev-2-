@@ -15,7 +15,8 @@ export class LoginPage implements OnInit {
   //triggered when user taps the button in the html 
   loginWithMicrosoft(){
     //this calls service which performs the msal login redirect 
-    this.loginService.login();
+   // this.loginService.login(); 
+   this.router.navigateByUrl('/onboarding');
   }
 
   ngOnInit() {
