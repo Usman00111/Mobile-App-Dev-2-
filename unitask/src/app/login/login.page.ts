@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../services/login.service';
-
+import {Router } from '@angular/router'
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -10,7 +10,8 @@ import { LoginService } from '../services/login.service';
 export class LoginPage implements OnInit {
 
   //injecting custom loginservice
-  constructor(private loginService: LoginService) { }
+  //constructor(private loginService: LoginService) { }
+  constructor(private router: Router) {}
 
   //triggered when user taps the button in the html 
   loginWithMicrosoft(){
