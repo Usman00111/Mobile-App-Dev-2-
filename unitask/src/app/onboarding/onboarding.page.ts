@@ -1,5 +1,4 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import type { Swiper } from 'swiper/types';
 import {Router } from '@angular/router';
 
 
@@ -13,13 +12,14 @@ import {Router } from '@angular/router';
 })
 export class OnboardingPage implements OnInit {
   //gets ref to the slide ionslides element in the html 
-@ViewChild('SwipeRef', {static:false}) swiperRef!: ElementRef<Swiper>;
+@ViewChild('SwipeRef', {static:false}) swiperRef!: ElementRef<any>;
 
   constructor(private router: Router) { }
 
   //Move to the next slide
   next(){
-   this.swiperRef.nativeElement.slideNext();
+    const swiper = this.swiperRef.nativeElement.swiper;
+    swiper.slideNext
   }
 
   //finish onboarding and go to home, i also stored a flag so it only shows once 
