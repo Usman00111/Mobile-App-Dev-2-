@@ -14,8 +14,14 @@ export class OnboardingPage implements OnInit {
   //gets ref to the slide ionslides element in the html 
 @ViewChild('SwipeRef', {static:false}) swiperRef!: ElementRef<any>;
 
+private swiper: any; //holds the actual swiper instance 
+  
   constructor(private router: Router) { }
 
+  ngAfterViewInit(){
+    this.swiper = this.swiperRef.nativeElement.swiper;
+  }
+  
   //Move to the next slide
   next(){
     const swiper = this.swiperRef.nativeElement.swiper;
