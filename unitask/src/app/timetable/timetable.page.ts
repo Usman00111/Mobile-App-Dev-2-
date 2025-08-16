@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
   selector: 'app-timetable',
   templateUrl: './timetable.page.html',
   styleUrls: ['./timetable.page.scss'],
+  standalone: false
 })
 export class TimetablePage implements OnInit {
 

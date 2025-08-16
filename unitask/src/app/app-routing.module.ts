@@ -22,6 +22,10 @@ const routes: Routes = [
   {
     path: 'timetable',
     loadChildren: () => import('./timetable/timetable.module').then( m => m.TimetablePageModule)
+  },
+  {
+    path: 'tasks',
+    loadChildren: () => import('./tasks/tasks.module').then( m => m.TasksPageModule)
   }
 ];
 
