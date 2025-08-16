@@ -1,13 +1,27 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>add-task</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tasks"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Add Task</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">add-task</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <ion-item>
+    <ion-label position="stacked">Task Title</ion-label>
+    <ion-input [(ngModel)]="taskTitle"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Module</ion-label>
+    <ion-input [(ngModel)]="taskModule"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Due Date</ion-label>
+    <ion-datetime display-format="DD/MM/YYYY" [(ngModel)]="taskDate"></ion-datetime>
+  </ion-item>
+
+  <ion-button expand="block" (click)="saveTask()">Save Task</ion-button>
 </ion-content>
