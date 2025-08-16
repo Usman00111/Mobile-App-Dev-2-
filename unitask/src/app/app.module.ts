@@ -27,6 +27,6 @@ import {PublicClientApplication, InteractionType} from '@azure/msal-browser';
     }
   )],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent, MsalRedirectComponent],
 })
 export class AppModule {}
