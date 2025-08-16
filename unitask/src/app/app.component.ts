@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import {Router } from '@angular/router';
+import { MsalService } from '@azure/msal-angular';
 
 @Component({
   selector: 'app-root',
@@ -7,5 +9,15 @@ import { Component } from '@angular/core';
   standalone: false
 })
 export class AppComponent {
-  constructor() {}
+  constructor(
+    private router: Router,
+    private msalService: MsalService
+  ) {
+    //check if user is already authenticated when app loads
+    const accounts = this.msalService.instance.getAllAccounts();
+    if(accounts.length > 0) {
+      //if an accounts exists, navigate directly to the homepage
+      this.router.navigateByUrl('/home');
+    }
+  }
 }
