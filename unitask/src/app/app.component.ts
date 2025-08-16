@@ -13,6 +13,8 @@ export class AppComponent {
     private router: Router,
     private msalService: MsalService
   ) {
+    //process microsoft redirect response 
+    this.msalService.instance.handleRedirectPromise();
     //check if user is already authenticated when app loads
     const accounts = this.msalService.instance.getAllAccounts();
     if(accounts.length > 0) {
