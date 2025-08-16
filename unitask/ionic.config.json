@@ -1,0 +1,7 @@
+{
+  "name": "unitask",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
