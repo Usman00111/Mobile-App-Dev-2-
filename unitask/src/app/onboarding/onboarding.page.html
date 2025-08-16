@@ -1,16 +1,18 @@
 <ion-content class="ion-padding">
   <!-- Swiper Web Component version -->
-  <swiper-container swiperRef slides-per-view="1" pagination="true">
+
+   <swiper-container #swiperRef slides-per-view="1" pagination="true" (swiperafterinit)="onSwiperInit($event)">
+    
     <swiper-slide>
       <h2>Welcome to UniTask</h2>
       <p>Stay organised with your timetable and tasks.</p>
-      <ion-button expand="block" (click)="next()">Next</ion-button>
+      <ion-button expand="block" (click)="next()">Swipe to continue</ion-button>
     </swiper-slide>
 
     <swiper-slide>
       <h2>Class Timetable</h2>
       <p>Easily view and manage your weekly classes.</p>
-      <ion-button expand="block" (click)="next()">Next</ion-button>
+      <ion-button expand="block" (click)="next()">Swipe to continue</ion-button>
     </swiper-slide>
 
     <swiper-slide>
@@ -18,5 +20,7 @@
       <p>Track your assignments and deadlines.</p>
       <ion-button expand="block" (click)="finish()">Get Started</ion-button>
     </swiper-slide>
+
+
   </swiper-container>
 </ion-content>

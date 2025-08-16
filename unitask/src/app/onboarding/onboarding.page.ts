@@ -1,8 +1,5 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import {Router } from '@angular/router';
-
-
-
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-onboarding',
@@ -10,30 +7,26 @@ import {Router } from '@angular/router';
   styleUrls: ['./onboarding.page.scss'],
   standalone: false
 })
-export class OnboardingPage implements OnInit {
-  //gets ref to the slide ionslides element in the html 
-@ViewChild('SwipeRef', {static:false}) swiperRef!: ElementRef<any>;
+export class OnboardingPage  {
 
-private swiper: any; //holds the actual swiper instance 
-  
-  constructor(private router: Router) { }
+  // Will hold the Swiper instance after initialisation
+  private swiperInstance: any;
 
-  ngAfterViewInit(){
-    this.swiper = this.swiperRef.nativeElement.swiper;
-  }
-  
-  //Move to the next slide
-  next(){
-    const swiper = this.swiperRef.nativeElement.swiper;
-    swiper.slideNext
+  constructor(private router: Router) {}
+
+  // Event handler called when Swiper is fully initialised
+  onSwiperInit(event: any) {
+    this.swiperInstance = event.target.swiper;
   }
 
-  //finish onboarding and go to home, i also stored a flag so it only shows once 
-  finish(){
+  // Move to next slide
+  next() {
+    this.swiperInstance?.slideNext();
+  }
+
+  // Finish and go to home (only shown first time)
+  finish() {
     localStorage.setItem('onboardingShown', 'true');
     this.router.navigateByUrl('/home');
   }
-  ngOnInit() {
-  }
-
 }

@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { register } from 'swiper/element/bundle';
+register();
 import {Router } from '@angular/router';
 import { MsalService } from '@azure/msal-angular';
 
@@ -14,7 +16,7 @@ export class AppComponent {
     private msalService: MsalService
   ) {
     //process microsoft redirect response 
-    this.msalService.instance.handleRedirectPromise();
+   // this.msalService.instance.handleRedirectPromise();
     //check if user is already authenticated when app loads
     const accounts = this.msalService.instance.getAllAccounts();
     if(accounts.length > 0) {
