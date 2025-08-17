@@ -8,10 +8,10 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-<div style="display:flex; justify-content:space-between; align-items:center;">
-  <h2 style="margin:0;">All Tasks</h2>
-  <ion-button size="small" (click)="openSortOptions()">Sort By</ion-button>
-</div>
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <h2 style="margin:0;">All Tasks</h2>
+    <ion-button size="small" (click)="openSortOptions()">Sort By</ion-button>
+  </div>
 
 
   <ng-container *ngIf="tasks.length > 0; else noTasks">
@@ -27,7 +27,18 @@
             <strong>Time:</strong> {{ task.date | date:'HH:mm' }}
           </p>
         </ion-label>
+
+        <!-- Action icons -->
+        <ion-buttons slot="end">
+          <ion-button size="small" fill="clear" (click)="editTask(task)">
+            <ion-icon name="create-outline"></ion-icon>
+          </ion-button>
+          <ion-button size="small" fill="clear" (click)="deleteTask(task)">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
       </ion-item>
+
     </ion-list>
   </ng-container>
 

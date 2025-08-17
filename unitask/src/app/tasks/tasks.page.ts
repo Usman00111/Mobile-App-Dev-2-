@@ -49,6 +49,14 @@ export class TasksPage implements OnInit {
     this.tasks.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   }
 
+  edittask(task: Task) {
+    // todo open edit page
+  }
+
+  deletetask(task: Task) {
+    //todo call task service to remove
+  }
+
 
 
 }
