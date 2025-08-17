@@ -22,4 +22,9 @@ export class TaskService {
   getTasks(): Task[] {
     return this.tasks;
   }
+
+  //delete a task
+  deleteTask(taskToDelete: Task) {
+    this.tasks = this.tasks.filter(task => task !== taskToDelete);
+  }
 }
