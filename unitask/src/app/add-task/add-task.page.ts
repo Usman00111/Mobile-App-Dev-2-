@@ -1,5 +1,6 @@
 import { Component} from '@angular/core';
 import { Router } from '@angular/router';
+import { TaskService } from '../services/task.service';
 
 @Component({
   selector: 'app-add-task',
@@ -14,15 +15,17 @@ export class AddTaskPage {
   taskDate = '';
 
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private taskService: TaskService) { }
 
   //temporar: just log the data and navifgate back 
   saveTask() {
-    console.log({
+    //save to service
+    this.taskService.addTask({
       title: this.taskTitle,
       module: this.taskModule,
       date: this.taskDate
     });
-    this.router.navigate(['/home']);
+    //route back to tasks page
+    this.router.navigate(['/tasks']);
   }
 }
