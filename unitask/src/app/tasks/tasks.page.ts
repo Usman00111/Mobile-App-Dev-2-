@@ -50,7 +50,7 @@ export class TasksPage implements OnInit {
   }
 
   editTask(task: Task) {
-    // todo open edit page
+    this.router.navigateByUrl('/edit-task', {state: { task } });
   }
 
   deleteTask(task: Task) {
