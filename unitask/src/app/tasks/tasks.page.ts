@@ -59,6 +59,10 @@ export class TasksPage implements OnInit {
     this.tasks = this.taskService.getTasks();
   }
 
+  markComplete(task: Task) {
+    task.completed = true;
+  }
+
 
 
 }

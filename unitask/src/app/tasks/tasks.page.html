@@ -17,7 +17,7 @@
   <ng-container *ngIf="tasks.length > 0; else noTasks">
     <ion-list>
       <ion-item *ngFor="let task of tasks">
-        <ion-label>
+        <ion-label [ngClass]="{'completed-task': task.completed}">
           <h3>{{ task.title }}</h3>
           <p><strong>Module:</strong> {{ task.module }}</p>
           <p><strong>Location:</strong> {{ task.location }}</p>
@@ -35,6 +35,9 @@
           </ion-button>
           <ion-button size="small" fill="clear" (click)="deleteTask(task)">
             <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+          <ion-button size="small" fill="clear" (click)="markComplete(task)">
+            <ion-icon name="checkmark-done-outline"></ion-icon>
           </ion-button>
         </ion-buttons>
       </ion-item>
