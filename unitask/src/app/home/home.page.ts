@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
 import { TaskService,Task } from '../services/task.service';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +13,7 @@ export class HomePage implements OnInit {
 
   tasks: Task[] = [];
 
-  constructor(private router: Router, private taskService: TaskService) { }
+  constructor(private router: Router, private taskService: TaskService, private alertController: AlertController) { }
 
   ngOnInit() {
   // for now, showing all tasks
@@ -29,5 +30,26 @@ export class HomePage implements OnInit {
     this.router.navigateByUrl('/tasks');
   }
 
+  // show sorting alert
+async openSortOptions() {
+  const alert = await this.alertController.create({
+    header: 'Sort Tasks',
+    buttons: [
+      {
+        text: 'Earliest Due Date',
+        handler: () => this.sortByDate()   // <-- call it (with parentheses)
+      },
+      {
+        text: 'Cancel',
+        role: 'cancel'
+      }
+    ]
+  });
 
+  await alert.present();
 }
+
+// Sort tasks array (using the correct field name: date)
+sortByDate() {
+  this.tasks.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+}}

@@ -8,7 +8,11 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <h2>All Tasks</h2>
+<div style="display:flex; justify-content:space-between; align-items:center;">
+  <h2 style="margin:0;">All Tasks</h2>
+  <ion-button size="small" (click)="openSortOptions()">Sort By</ion-button>
+</div>
+
 
   <ng-container *ngIf="tasks.length > 0; else noTasks">
     <ion-list>
