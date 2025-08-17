@@ -4,6 +4,7 @@ export interface Task {
   title: string;
   module: string;
   date: string;
+  location: string;
 }
 
 @Injectable({

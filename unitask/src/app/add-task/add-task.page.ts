@@ -13,6 +13,7 @@ export class AddTaskPage {
   taskTitle = '';
   taskModule = '';
   taskDate = '';
+  taskLocation = '';
 
 
   constructor(private router: Router, private taskService: TaskService) { }
@@ -23,7 +24,8 @@ export class AddTaskPage {
     this.taskService.addTask({
       title: this.taskTitle,
       module: this.taskModule,
-      date: this.taskDate
+      date: this.taskDate,
+      location: this.taskLocation
     });
     //route back to tasks page
     this.router.navigate(['/tasks']);

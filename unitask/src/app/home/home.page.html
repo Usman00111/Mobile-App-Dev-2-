@@ -11,15 +11,24 @@
 
   <!-- Today's Tasks -->
   <h2>Today’s Tasks</h2>
-  <p>No tasks yet</p>
+  <ion-item *ngFor="let task of tasks">
+    <ion-label>
+      <h3>{{ task.title }}</h3>
+      <p><strong>Module:</strong> {{ task.module }}</p>
+      <p><strong>Location:</strong> {{ task.location }}</p>
+      <p>
+        <strong>Date:</strong> {{ task.date | date:'dd/MM/yyyy' }}
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <strong>Time:</strong> {{ task.date | date:'HH:mm' }}
+      </p>
+    </ion-label>
+  </ion-item>
 
   <ion-button expand="block" (click)="goToTimetable()">
-  View Timetable
-</ion-button>
+    View Timetable
+  </ion-button>
 
-<ion-button expand="block" (click)="goToTasks()">
-  View All Tasks
-</ion-button>
-
+  <ion-button expand="block" (click)="goToTasks()">
+    View All Tasks
+  </ion-button>
 </ion-content>
-

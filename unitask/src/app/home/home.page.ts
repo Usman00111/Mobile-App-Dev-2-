@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
+import { TaskService,Task } from '../services/task.service';
 
 @Component({
   selector: 'app-home',
@@ -9,7 +10,14 @@ import {Router} from '@angular/router';
 })
 export class HomePage implements OnInit {
 
-  constructor(private router: Router) { }
+  tasks: Task[] = [];
+
+  constructor(private router: Router, private taskService: TaskService) { }
+
+  ngOnInit() {
+  // for now, showing all tasks
+    this.tasks = this.taskService.getTasks();
+  }
 
   //navigate to timetable page
   goToTimetable(){
@@ -21,7 +29,5 @@ export class HomePage implements OnInit {
     this.router.navigateByUrl('/tasks');
   }
 
-  ngOnInit() {
-  }
 
 }
