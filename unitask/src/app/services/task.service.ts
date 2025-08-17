@@ -13,11 +13,11 @@ export class TaskService {
   private tasks: Task[] = [];
 
   constructor() {}
-
+// Add a new task
   addTask(task: Task) {
     this.tasks.push(task);
   }
-
+  // Get all tasks
   getTasks(): Task[] {
     return this.tasks;
   }
