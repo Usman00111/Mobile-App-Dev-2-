@@ -30,6 +30,18 @@ export class HomePage implements OnInit {
     this.router.navigateByUrl('/tasks');
   }
 
+  markComplete(task: Task) {
+  task.completed = true;
+
+  // Re-order tasks so completed tasks go to the bottom
+  this.tasks.sort((a, b) => {
+    if (a.completed === b.completed) return 0; 
+    return a.completed ? 1 : -1;
+  });
+}
+
+
+
   // show sorting alert
 async openSortOptions() {
   const alert = await this.alertController.create({
@@ -53,3 +65,5 @@ async openSortOptions() {
 sortByDate() {
   this.tasks.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 }}
+
+

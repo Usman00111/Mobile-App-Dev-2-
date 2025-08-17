@@ -61,6 +61,12 @@ export class TasksPage implements OnInit {
 
   markComplete(task: Task) {
     task.completed = true;
+
+    //re-order tasks so completed tasks go to the bottom
+    this.tasks.sort((a, b) => {
+      if (a.completed === b.completed) return 0; 
+        return a.completed ? 1 : -1;
+    });
   }
 
 

@@ -7,26 +7,33 @@
 <ion-content class="ion-padding">
   <!-- Today's Schedule -->
   <div style="display:flex; justify-content:space-between; align-items:center;">
-  <h2 style="margin:0;">Today’s Tasks</h2>
-  <ion-button size="small" (click)="openSortOptions()">Sort By</ion-button>
-</div>
+    <h2 style="margin:0;">Today’s Tasks</h2>
+    <ion-button size="small" (click)="openSortOptions()">Sort By</ion-button>
+  </div>
 
   <p>No classes yet</p>
 
   <!-- Today's Tasks -->
   <h2>Today’s Tasks</h2>
   <ion-item *ngFor="let task of tasks">
-    <ion-label>
-      <h3>{{ task.title }}</h3>
-      <p><strong>Module:</strong> {{ task.module }}</p>
-      <p><strong>Location:</strong> {{ task.location }}</p>
-      <p>
-        <strong>Date:</strong> {{ task.date | date:'dd/MM/yyyy' }}
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <strong>Time:</strong> {{ task.date | date:'HH:mm' }}
-      </p>
-    </ion-label>
-  </ion-item>
+  <ion-label [ngClass]="{ 'completed-task': task.completed }">
+    <h3>{{ task.title }}</h3>
+    <p><strong>Module:</strong> {{ task.module }}</p>
+    <p><strong>Location:</strong> {{ task.location }}</p>
+    <p>
+      <strong>Date:</strong> {{ task.date | date:'dd/MM/yyyy' }}
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <strong>Time:</strong> {{ task.date | date:'HH:mm' }}
+    </p>
+  </ion-label>
+
+  <ion-buttons slot="end">
+    <ion-button size="small" fill="clear" (click)="markComplete(task)">
+      <ion-icon name="checkmark-done-outline"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+</ion-item>
+
 
   <ion-button expand="block" (click)="goToTimetable()">
     View Timetable
