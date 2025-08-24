@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router'
 import { TaskService, Task } from '../services/task.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController, IonItemSliding } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -73,5 +73,14 @@ export class TasksPage implements OnInit, OnDestroy {
     // Persist completion to Firestore; UI updates via tasks$ subscription
     this.taskService.updateTask({ ...task, completed: true });
   }
+// SWIPE actions (used by the sliding options)
+  onDeleteSwipe(task: Task, sliding?: IonItemSliding) {
+    this.deleteTask(task);   
+    sliding?.close();       
+  }
 
+  onCompleteSwipe(task: Task, sliding?: IonItemSliding) {
+    this.markComplete(task); // reuse tap logic
+    sliding?.close();        // close the sliding row
+  }
 }
