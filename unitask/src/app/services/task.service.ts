@@ -39,6 +39,7 @@ export class TaskService {
       return () => unsub();
     });
   }
+
   addTask(task: Task): Promise<string> {
   return addDoc(collection(this.fb.db, 'tasks'), {
     title: task.title,
@@ -47,26 +48,56 @@ export class TaskService {
     location: task.location,
     completed: !!task.completed
   }).then(async ref => {
-    await this.scheduleReminder(task);  // <-- schedule local notification
-    return ref.id;
-  });
-}
+    //schedule after we have the Firestore doc id (deterministic notif id)
+      const t: Task = { ...task, id: ref.id };
+      await this.scheduleReminder(t);
+      return ref.id;
+    });
+  }
 
 updateTask(task: Task): Promise<void> {
   if (!task.id) return Promise.reject(new Error('Task id missing'));
-  return updateDoc(doc(this.fb.db, 'tasks', task.id), {
-    title: task.title,
-    module: task.module,
-    date: task.date,
-    location: task.location,
-    completed: !!task.completed
-  });
-}
+ // cancel existing reminder first, then update, then (re)schedule
+    const pCancel = this.cancelReminder(task).catch(() => {});
+    const pUpdate = updateDoc(doc(this.fb.db, 'tasks', task.id), {
+      title: task.title,
+      module: task.module,
+      date: task.date,
+      location: task.location,
+      completed: !!task.completed
+    });
+    return Promise.all([pCancel, pUpdate]).then(() => this.scheduleReminder(task));
+  }
 
 deleteTask(task: Task): Promise<void> {
   if (!task.id) return Promise.reject(new Error('Task id missing'));
-  return deleteDoc(doc(this.fb.db, 'tasks', task.id));
-}
+ // cancel any scheduled notification for this task
+    this.cancelReminder(task).catch(() => {});
+    return deleteDoc(doc(this.fb.db, 'tasks', task.id));
+  }
+
+  // deterministic notification id derived from Firestore doc id
+  private notifIdFromTask(task: Task): number {
+    const s = task.id || '';
+    let h = 0;
+    for (let i = 0; i < s.length; i++) {
+      h = ((h << 5) - h) + s.charCodeAt(i);
+      h |= 0;
+    }
+    return Math.abs(h % 2147483647);
+  }
+
+  // cancel a previously scheduled reminder
+  private async cancelReminder(task: Task) {
+    try {
+      if (!task.id) return;
+      const id = this.notifIdFromTask(task);
+      await LocalNotifications.cancel({ notifications: [{ id }] });
+    } catch (e) {
+      console.warn('Local notification cancel failed:', e);
+    }
+  }
+
 // Schedule a local notification for the task's due date/time
 private async scheduleReminder(task: Task) {
   try {
@@ -75,15 +106,17 @@ private async scheduleReminder(task: Task) {
       // Skip invalid or past times
       return;
     }
-
-    const id = Math.floor(Date.now() % 2147483647); // 32-bit safe id
+    // use deterministic id & Android channel
+    if (!task.id) return;
+    const id = this.notifIdFromTask(task);
 
     const opts: ScheduleOptions = {
       notifications: [{
         id,
         title: 'Task due',
         body: `${task.title} (${task.module}) at ${when.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`,
-        schedule: { at: when }
+        schedule: { at: when },
+        channelId: 'task-reminders'
       }]
     };
 
@@ -93,7 +126,5 @@ private async scheduleReminder(task: Task) {
     console.warn('Local notification schedule failed:', e);
   }
 }
-
-
 
 }
