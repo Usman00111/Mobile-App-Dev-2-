@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router'
 import { TaskService, Task } from '../services/task.service';
 import { AlertController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-tasks',
@@ -9,15 +10,25 @@ import { AlertController } from '@ionic/angular';
   styleUrls: ['./tasks.page.scss'],
   standalone: false
 })
-export class TasksPage implements OnInit {
+export class TasksPage implements OnInit, OnDestroy {
 
   tasks: Task[] = [];
+  private sub?: Subscription;
 
   constructor(private router: Router, private taskService: TaskService, private alertController: AlertController) { }
 
   ngOnInit() {
-    //get tasks from the service
-    this.tasks = this.taskService.getTasks();
+    // subscribe to Firestore tasks and keep completed at the bottom
+    this.sub = this.taskService.tasks$().subscribe(items => {
+      this.tasks = items.slice().sort((a, b) => {
+        if (!!a.completed === !!b.completed) return 0;
+        return a.completed ? 1 : -1;
+      });
+    });
+  }
+
+  ngOnDestroy() {
+    this.sub?.unsubscribe();
   }
 
   //navigate to the add task page
@@ -46,7 +57,7 @@ export class TasksPage implements OnInit {
 
   // Sort by date
   sortByDate() {
-    this.tasks.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    this.tasks = this.tasks.slice().sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   }
 
   editTask(task: Task) {
@@ -54,21 +65,13 @@ export class TasksPage implements OnInit {
   }
 
   deleteTask(task: Task) {
+    // Firestore delete; list auto-refreshes via tasks$ subscription
     this.taskService.deleteTask(task);
-    //refresh local array
-    this.tasks = this.taskService.getTasks();
   }
 
   markComplete(task: Task) {
-    task.completed = true;
-
-    //re-order tasks so completed tasks go to the bottom
-    this.tasks.sort((a, b) => {
-      if (a.completed === b.completed) return 0; 
-        return a.completed ? 1 : -1;
-    });
+    // Persist completion to Firestore; UI updates via tasks$ subscription
+    this.taskService.updateTask({ ...task, completed: true });
   }
-
-
 
 }
