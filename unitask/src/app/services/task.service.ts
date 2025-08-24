@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FirebaseService } from './firebase.service';
 import { Observable } from 'rxjs';
-import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
+import { collection, onSnapshot, query, orderBy, addDoc } from 'firebase/firestore';
 
 
 export interface Task {
@@ -38,8 +38,16 @@ export class TaskService {
       return () => unsub();
     });
   }
-  
-  addTask(_task: Task): Promise<string> { return Promise.resolve(''); }
+  addTask(task: Task): Promise<string> {
+  return addDoc(collection(this.fb.db, 'tasks'), {
+    title: task.title,
+    module: task.module,
+    date: task.date,          
+    location: task.location,
+    completed: !!task.completed
+  }).then(ref => ref.id);
+}
+
   updateTask(_task: Task): Promise<void> { return Promise.resolve(); }
   deleteTask(_task: Task): Promise<void> { return Promise.resolve(); }
 }
