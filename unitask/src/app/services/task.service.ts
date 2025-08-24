@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { FirebaseService } from './firebase.service';
 import { Observable } from 'rxjs';
 import { collection, onSnapshot, query, orderBy, addDoc, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { LocalNotifications, ScheduleOptions } from '@capacitor/local-notifications';
 
 
 export interface Task {
@@ -45,7 +46,10 @@ export class TaskService {
     date: task.date,          
     location: task.location,
     completed: !!task.completed
-  }).then(ref => ref.id);
+  }).then(async ref => {
+    await this.scheduleReminder(task);  // <-- schedule local notification
+    return ref.id;
+  });
 }
 
 updateTask(task: Task): Promise<void> {
@@ -63,5 +67,33 @@ deleteTask(task: Task): Promise<void> {
   if (!task.id) return Promise.reject(new Error('Task id missing'));
   return deleteDoc(doc(this.fb.db, 'tasks', task.id));
 }
+// Schedule a local notification for the task's due date/time
+private async scheduleReminder(task: Task) {
+  try {
+    const when = new Date(task.date); // expects ISO string from ion-datetime
+    if (isNaN(when.getTime()) || when.getTime() <= Date.now()) {
+      // Skip invalid or past times
+      return;
+    }
+
+    const id = Math.floor(Date.now() % 2147483647); // 32-bit safe id
+
+    const opts: ScheduleOptions = {
+      notifications: [{
+        id,
+        title: 'Task due',
+        body: `${task.title} (${task.module}) at ${when.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`,
+        schedule: { at: when }
+      }]
+    };
+
+    await LocalNotifications.schedule(opts);
+  } catch (e) {
+    // Avoid crashing if notifications fail on web/emulator
+    console.warn('Local notification schedule failed:', e);
+  }
+}
+
+
 
 }
