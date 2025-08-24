@@ -18,14 +18,13 @@ export class AddTaskPage {
 
   constructor(private router: Router, private taskService: TaskService) { }
 
-  //temporar: just log the data and navifgate back 
-  saveTask() {
-    //save to service
-    this.taskService.addTask({
+    async saveTask() {
+    await this.taskService.addTask({
       title: this.taskTitle,
       module: this.taskModule,
       date: this.taskDate,
-      location: this.taskLocation
+      location: this.taskLocation,
+      completed: false
     });
     //route back to tasks page
     this.router.navigate(['/tasks']);
