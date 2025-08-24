@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { register } from 'swiper/element/bundle';
 register();
-import {Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { MsalService } from '@azure/msal-angular';
-import { LocalNotifications } from '@capacitor/local-notifications'; 
+import { LocalNotifications } from '@capacitor/local-notifications';
 
 @Component({
   selector: 'app-root',
@@ -14,15 +14,15 @@ import { LocalNotifications } from '@capacitor/local-notifications';
 export class AppComponent {
   constructor(
     private router: Router,
-    private msalService: MsalService, 
+    private msalService: MsalService,
   ) {
     //Ask for Local Notifications permission once at app start
     void this.ensureNotifPermission();
     //process microsoft redirect response 
-   // this.msalService.instance.handleRedirectPromise();
+    // this.msalService.instance.handleRedirectPromise();
     //check if user is already authenticated when app loads
     const accounts = this.msalService.instance.getAllAccounts();
-    if(accounts.length > 0) {
+    if (accounts.length > 0) {
       //if an accounts exists, navigate directly to the homepage
       this.router.navigateByUrl('/home');
     }
@@ -34,9 +34,16 @@ export class AppComponent {
       if (display !== 'granted') {
         await LocalNotifications.requestPermissions();
       }
+
+      //Create a channel for task reminders (Android only)
+      await LocalNotifications.createChannel?.({
+        id: 'task-reminders',
+        name: 'Task Reminders',
+        description: 'Due-time reminders for your tasks',
+        importance: 5 // Max
+      });
     } catch (err) {
-      // Don’t crash in web/emulator; LocalNotifications may be unavailable there
-      console.warn('LocalNotifications permission request skipped/failed:', err);
+      console.warn('LocalNotifications permission/channel setup skipped/failed:', err);
     }
   }
 }
