@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
+import { FirebaseService } from './firebase.service';
+import { Observable } from 'rxjs';
 
 export interface Task {
+   id?: string;
   title: string;
   module: string;
   date: string;
@@ -8,24 +11,15 @@ export interface Task {
   completed?: boolean;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class TaskService {
-  private tasks: Task[] = [];
+  constructor(private fb: FirebaseService) {}
 
-  constructor() {}
-// Add a new task
-  addTask(task: Task) {
-    this.tasks.push(task);
+  // Stub methods for now
+  tasks$(): Observable<Task[]> {
+    return new Observable<Task[]>(sub => { sub.next([]); sub.complete(); });
   }
-  // Get all tasks
-  getTasks(): Task[] {
-    return this.tasks;
-  }
-
-  //delete a task
-  deleteTask(taskToDelete: Task) {
-    this.tasks = this.tasks.filter(task => task !== taskToDelete);
-  }
+  addTask(_task: Task): Promise<string> { return Promise.resolve(''); }
+  updateTask(_task: Task): Promise<void> { return Promise.resolve(); }
+  deleteTask(_task: Task): Promise<void> { return Promise.resolve(); }
 }
