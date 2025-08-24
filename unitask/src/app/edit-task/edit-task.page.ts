@@ -20,14 +20,8 @@ export class EditTaskPage {
 
   }
 
-  saveChanges() {
-    //remove old version of task
-    this.taskService.deleteTask(this.task);
-
-    //re-add the modified task
-    this.taskService.addTask(this.task);
-
-    //go back to the task page
+   async saveChanges() {
+    await this.taskService.updateTask(this.task);
     this.router.navigateByUrl('/tasks');
   }
 
