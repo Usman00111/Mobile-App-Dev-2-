@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FirebaseService } from './firebase.service';
 import { Observable } from 'rxjs';
-import { collection, onSnapshot, query, orderBy, addDoc, doc, updateDoc } from 'firebase/firestore';
+import { collection, onSnapshot, query, orderBy, addDoc, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 
 
 export interface Task {
@@ -59,5 +59,9 @@ updateTask(task: Task): Promise<void> {
   });
 }
 
-  deleteTask(_task: Task): Promise<void> { return Promise.resolve(); }
+deleteTask(task: Task): Promise<void> {
+  if (!task.id) return Promise.reject(new Error('Task id missing'));
+  return deleteDoc(doc(this.fb.db, 'tasks', task.id));
+}
+
 }
