@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { initializeApp, FirebaseApp } from 'firebase/app';
-import { getFirestore, Firestore } from 'firebase/firestore';
+import {
+  initializeFirestore,
+  Firestore,
+  persistentLocalCache,
+  persistentMultipleTabManager,
+} from 'firebase/firestore';
 import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -9,10 +14,16 @@ export class FirebaseService {
   db: Firestore;
 
   constructor() {
-    // Initializes Firebase app with the web config
+    // Initialises Firebase app with your web config
     this.app = initializeApp(environment.firebase);
 
-    // Initialize Firestore for the app
-    this.db = getFirestore(this.app);
+    // offline persistence:
+    // - persistentLocalCache:  stores data in IndexedDB
+    // - persistentMultipleTabManager:   safe multi-tab usage
+    this.db = initializeFirestore(this.app, {
+      localCache: persistentLocalCache({
+        tabManager: persistentMultipleTabManager(),
+      }),
+    });
   }
 }
