@@ -30,7 +30,7 @@ export class TaskService {
             title: data.title,
             module: data.module,
             date: data.date,
-            location: data.location,
+            location: data.location ?? 'not set',
             completed: !!data.completed,
           };
         });
