@@ -4,6 +4,7 @@ import { TaskService,Task } from '../services/task.service';
 import { AlertController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 
+// Angular component decorator that defines metadata for this page
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
@@ -13,13 +14,16 @@ import { Subscription } from 'rxjs';
 
 export class HomePage implements OnInit, OnDestroy {
 
+   // Array of tasks displayed on the home page
   tasks: Task[] = [];
+  // Holds subscription to Firestore observable
   private sub?: Subscription;
 
+  // Inject Router, TaskService (for data), and AlertController for daloguess 
   constructor(private router: Router,private taskService: TaskService,private alertController: AlertController) {}
 
   ngOnInit() {
-    // Subscribe to Firestore tasks observable; keep completed at bottom
+    // Subscribe to Firestore tasks observable; keep completed tasks at bottom
     this.sub = this.taskService.tasks$().subscribe(items => {
       this.tasks = items.slice().sort((a, b) => {
         if (!!a.completed === !!b.completed) return 0;

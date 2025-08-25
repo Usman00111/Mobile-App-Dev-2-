@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { TaskService, Task } from '../services/task.service';
 
+// Angular component decorator that defines metadata for this page
 @Component({
   selector: 'app-edit-task',
   templateUrl: './edit-task.page.html',
@@ -10,8 +11,10 @@ import { TaskService, Task } from '../services/task.service';
 })
 export class EditTaskPage {
 
+  // Task object to hold the task being edited
   task!: Task;
 
+  // Inject Router (for navigation) and TaskService (for data handling)
   constructor(private router: Router, private taskService: TaskService) {
     //get the task from navigation state 
     const nav = this.router.getCurrentNavigation();
@@ -20,7 +23,8 @@ export class EditTaskPage {
 
   }
 
-   async saveChanges() {
+  // Save updated task details and navigate back to tasks list
+  async saveChanges() {
     await this.taskService.updateTask(this.task);
     this.router.navigateByUrl('/tasks');
   }
